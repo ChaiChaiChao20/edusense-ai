@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101517" />
+    <title>EduSense — Classroom signal lab</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="rail">
+        <a class="brand" href="#top" aria-label="EduSense home"><span class="brand-mark">E</span><span>EDUSENSE<span class="brand-sub">SIGNAL LAB</span></span></a>
+        <div class="rail-section-label">WORKSPACE</div>
+        <a class="rail-link active" href="#overview"><span class="rail-icon">◫</span>Session overview</a>
+        <a class="rail-link" href="#signals"><span class="rail-icon">⌁</span>Live signals</a>
+        <a class="rail-link" href="#privacy"><span class="rail-icon">◈</span>Privacy model</a>
+        <div class="rail-bottom"><span class="pulse"></span><span id="systemState">Model not loaded</span></div>
+      </aside>
+
+      <main id="top">
+        <header class="topbar">
+          <div><div class="eyebrow">RESEARCH PROTOTYPE <span class="dot-sep">·</span> LOCAL INFERENCE</div><h1>Classroom signal lab</h1></div>
+          <div class="top-actions"><span class="privacy-pill"><span class="lock">◈</span> Frames stay on this device</span><button class="icon-btn" id="helpButton" title="About this prototype" aria-label="About">?</button></div>
+        </header>
+
+        <section class="intro" id="overview">
+          <div><div class="section-kicker">EDUSENSE AI / SESSION 01</div><h2>Notice the room.<br /><em>Support the learning.</em></h2><p>Read observable classroom signals over time. This prototype measures face visibility, eye closure and head orientation; it does not infer a student's thoughts, ability or emotion.</p></div>
+          <div class="intro-mark"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit-core"><span>ES</span><small>ON DEVICE</small></div><span class="orbit-dot"></span></div>
+        </section>
+
+        <section class="control-row" aria-label="Session controls">
+          <div class="control-group"><button class="button primary" id="cameraButton"><span class="button-icon">◉</span>Start camera</button><label class="button secondary file-button" for="videoFile"><span class="button-icon">↥</span>Analyze a video</label><input id="videoFile" type="file" accept="video/*" hidden /><button class="button ghost" id="demoButton"><span class="button-icon">✳</span>Run synthetic demo</button></div>
+          <div class="control-group"><button class="button secondary" id="exportButton" disabled><span class="button-icon">↓</span>Export summary</button><button class="button ghost" id="stopButton" disabled>Stop session</button></div>
+        </section>
+
+        <section class="dashboard-grid" id="signals">
+          <article class="panel video-panel">
+            <div class="panel-head"><div><div class="panel-label">LIVE ROOM VIEW</div><h3>Anonymous presence map</h3></div><span class="live-state" id="liveState"><span></span>STANDBY</span></div>
+            <div class="video-stage" id="videoStage"><video id="video" playsinline muted></video><canvas id="overlay"></canvas><div class="empty-stage" id="emptyStage"><div class="scan-icon"><span></span><span></span><span></span><span></span></div><strong>Choose a signal source</strong><p>Start your camera or open a local video. Nothing is uploaded.</p></div><div class="stage-corner corner-tl">EDU / LOCAL</div><div class="stage-corner corner-br" id="fpsBadge">— FPS</div></div>
+            <div class="stage-foot"><span><i class="legend-dot cyan"></i>Face detected</span><span><i class="legend-dot amber"></i>Long eye closure cue</span><span><i class="legend-dot" style="background:#c8f27b"></i>Raised-hand cue</span><span class="source-note" id="sourceNote">Face + pose run locally</span></div>
+          </article>
+
+          <article class="panel signals-panel">
+            <div class="panel-head"><div><div class="panel-label">SESSION PULSE</div><h3>What the room shows</h3></div><span class="time-chip" id="sessionClock">00:00</span></div>
+            <div class="metric-list">
+              <div class="metric"><div class="metric-icon cyan-bg">◌</div><div class="metric-copy"><span>People visible now</span><small>Anonymous count · no identity tracking</small></div><strong id="peopleCount">—</strong></div>
+              <div class="metric"><div class="metric-icon lime-bg">◎</div><div class="metric-copy"><span>Orientation support</span><small>Head and eye direction proxy</small></div><strong><span id="orientationScore">—</span><small class="unit">%</small></strong></div>
+              <div class="metric"><div class="metric-icon amber-bg">◔</div><div class="metric-copy"><span>Long closure cues</span><small>Eye closure over 1.2 seconds</small></div><strong id="closureCount">0</strong></div>
+              <div class="metric"><div class="metric-icon violet-bg">↑</div><div class="metric-copy"><span>Raised-hand cues now</span><small>Visible wrists above shoulder line</small></div><strong id="handRaiseCount">—</strong></div>
+              <div class="metric"><div class="metric-icon violet-bg">⌁</div><div class="metric-copy"><span>Frames observed</span><small>Since session start</small></div><strong id="sampleCount">0</strong></div>
+            </div>
+            <div class="insight" id="insight"><span class="insight-icon">✳</span><div><strong>Ready when you are</strong><p>Use this as a conversation starter, not a scorecard.</p></div></div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel chart-panel"><div class="panel-head"><div><div class="panel-label">TEMPORAL VIEW</div><h3>Room orientation, over time</h3></div><span class="chart-key"><i></i>Orientation support</span></div><div class="chart-wrap"><canvas id="chart" width="1000" height="230" aria-label="Orientation support over session time"></canvas><div class="chart-empty" id="chartEmpty">A session timeline will appear here</div></div><div class="chart-axis"><span>SESSION START</span><span id="chartElapsed">WAITING FOR SIGNAL</span><span>NOW</span></div></article>
+          <article class="panel notes-panel"><div class="panel-head"><div><div class="panel-label">TEACHER VIEW</div><h3>Gentle prompts</h3></div><span class="spark">✳</span></div><div class="prompt-list" id="promptList"><div class="prompt-item"><span class="prompt-number">01</span><div><strong>Check the room, not the number.</strong><p>Camera angle, lighting, seating and accessibility affect these signals.</p></div></div><div class="prompt-item"><span class="prompt-number">02</span><div><strong>Invite a low-pressure reset.</strong><p>A pause or comprehension check can help everyone rejoin.</p></div></div><div class="prompt-item"><span class="prompt-number">03</span><div><strong>Ask students directly.</strong><p>Self-report and conversation are stronger evidence than a camera proxy.</p></div></div></div></article>
+        </section>
+
+        <section class="privacy-panel panel" id="privacy"><div class="privacy-icon">◈</div><div><div class="panel-label">BUILT FOR A CAREFUL CLASSROOM</div><h3>Signals without surveillance.</h3><p>Face landmarks run in the browser. The app does not identify students, store frames, record video, or send class footage to a server. Aggregate summaries are exported only when you choose. MediaPipe's library and model are fetched from their public hosts; the library may send usage metrics as described in its privacy notice.</p></div><button class="text-button" id="privacyDetails">View boundaries <span>↗</span></button></section>
+
+        <footer><span>EDUSENSE AI · LOCAL PROTOTYPE</span><span>OBSERVABLE CUES ≠ INTERNAL STATE</span><span id="modelVersion">MODEL INITIALIZING</span></footer>
+      </main>
+    </div>
+    <dialog id="messageDialog"><form method="dialog"><button class="dialog-close" aria-label="Close">×</button><div class="panel-label">EDUSENSE / FIELD NOTES</div><h3 id="dialogTitle">About this prototype</h3><div id="dialogBody"></div><button class="button primary dialog-done">Got it</button></form></dialog>
+  </body>
+</html>
